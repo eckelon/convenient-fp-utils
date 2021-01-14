@@ -1,0 +1,26 @@
+{
+    "root": true,
+    "extends": [
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2019
+    },
+    "env": {
+      "node": true,
+      "es6": true
+    },
+    "plugins": [
+      "sort-destructure-keys"
+    ],
+    "rules": {
+      "indent": ["error", 2],
+      "arrow-parens": ["error", "always"],
+      "comma-style": ["error", "first"],
+      "quotes": [2, "single", { "avoidEscape": true }],
+      "no-unexpected-multiline": "off",
+      "object-curly-spacing": ["error", "always"],
+      "sort-destructure-keys/sort-destructure-keys": [2, {"caseSensitive": false}],
+      "comma-spacing" :["error", { "after": true }]
+    }
+}
