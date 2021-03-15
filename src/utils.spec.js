@@ -6,7 +6,7 @@ const { describe, expect, it } = require('@jest/globals');
 const {
   sanctuary: { add, compose: B, equals, fromMaybe, gt, is, Just, Nothing, pipe, size, splitOn }
   , sanctuaryDef: { Array, Number, String }
-  , utils: { allPass, anyPass, F, findEq, getEq, included, includes, map2, map3, noop, parallelAp, pluck, pReject, pResolve, T, tap, zipObj }
+  , utils: { allPass, anyPass, F, findEq, getEq, included, includes, map2, map3, noop, parallelAp, parallelApN, pluck, pReject, pResolve, T, tap, zipObj }
 } = require('.');
 
 const getStringLength = B(size)(splitOn(''));
@@ -107,6 +107,12 @@ describe('utils tests', () => {
 
     it('fails due to one of the functions is not a function', () =>
       expect(() => parallelAp('Not a function')(add(2))(1)).toThrowError(/The value at position 1 is not a member of ‘Function’/));
+
+    it('it parallel applies N functions to same value', () =>
+      expect(parallelApN([add(1), add(2)])(1)).toStrictEqual([2, 3]));
+
+    it('fails due to one of the functions is not a function', () =>
+      expect(() => parallelApN(['Not a function', add(2)])(1)).toThrowError(/The value at position 1 is not a member of ‘Function’/));
   });
 
   describe('getEq tests', () => {

@@ -144,6 +144,20 @@ module.exports = ({ $: { Any, AnyFunction, Array, Boolean, create, env, Function
   ([AnyFunction, AnyFunction, Any, Array(Any)])
   (parallelApImpl);
 
+  const parallelApNImpl = (functions) => (x) => functions.reduce((acc, fn) => [...acc, fn(x)], []);
+
+  /**
+   parallelApN :: Array Function => Any a => Array(a)
+   *
+   * Takes N functions and applies them to the same given value, returning an array of results
+   *
+   * @returns {Array}
+   */
+  const parallelApN = def('parallelApN')
+  ({})
+  ([Array(AnyFunction), Any, Array(Any)])
+  (parallelApNImpl);
+
   const includesImpl = (value) => (list) => list.includes(value);
   /**
    includes :: Any => Array Any => Boolean
@@ -204,6 +218,6 @@ module.exports = ({ $: { Any, AnyFunction, Array, Boolean, create, env, Function
   ([Function([Any, Boolean]), String, Array(Object), Array(Maybe(Any))])
   (pluckImpl)
 
-  return { allPass, anyPass, F, map2, map3, noop, parallelAp, pReject, pResolve, T, tap, zipObj, includes, included: C(includes), getEq, findEq, pluck };
+  return { allPass, anyPass, F, map2, map3, noop, parallelAp, parallelApN, pReject, pResolve, T, tap, zipObj, includes, included: C(includes), getEq, findEq, pluck };
 }
 
