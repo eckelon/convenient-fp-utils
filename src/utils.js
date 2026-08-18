@@ -25,25 +25,26 @@ module.exports = ({ $: { Any, AnyFunction, Array, Boolean, create, env, Function
 
   /**
    *
-   * thrush :: a -> (a -> b) -> b
+   * T :: a -> (a -> b) -> b
    *
-   * The T combinator: value FIRST, then the function. Flip of application.
+   * Thrush combinator: value FIRST, then the function. Flip of application.
+   * Same as sanctuary's S.T.
    *
    * @returns {Any}
    *
    */
-  const thrush = (x) => (f) => f (x);
+  const T = (x) => (f) => f (x);
 
   /**
    *
-   * substitution :: (a -> b -> c) -> (a -> b) -> a -> c
+   * S :: (a -> b -> c) -> (a -> b) -> a -> c
    *
-   * The S combinator: threads one value to two consumers — f(x)(g(x)).
+   * Substitution combinator: threads one value to two consumers — f(x)(g(x)).
    *
    * @returns {Any}
    *
    */
-  const substitution = (f) => (g) => (x) => f (x) (g (x));
+  const S = (f) => (g) => (x) => f (x) (g (x));
 
   /**
    *
@@ -77,23 +78,23 @@ module.exports = ({ $: { Any, AnyFunction, Array, Boolean, create, env, Function
 
   /**
    *
-   * T :: Boolean b => a -> b
+   * constTrue :: a -> Boolean
    *
    * Always returns true
    *
    * @returns {Boolean}
    */
-  const T = K (true);
+  const constTrue = K (true);
 
   /**
    *
-   * F :: Boolean b => a -> b
+   * constFalse :: a -> Boolean
    *
    * Always returns false
    *
    * @returns {Boolean}
    */
-  const F = K (false);
+  const constFalse = K (false);
 
   /**
  * zipObj :: Array -> Array -> Object
@@ -249,6 +250,6 @@ module.exports = ({ $: { Any, AnyFunction, Array, Boolean, create, env, Function
   ([Function([Any, Boolean]), String, Array(Object), Array(Maybe(Any))])
   (pluckImpl)
 
-  return { allPass, anyPass, F, map2, map3, mergeSingleton, noop, parallelAp, pReject, pResolve, substitution, T, tap, thrush, toMaybe, zipObj, includes, included: C(includes), getEq, findEq, pluck };
+  return { allPass, anyPass, constFalse, constTrue, map2, map3, mergeSingleton, noop, parallelAp, pReject, pResolve, S, T, tap, toMaybe, zipObj, includes, included: C(includes), getEq, findEq, pluck };
 }
 

@@ -6,7 +6,7 @@ const { describe, expect, it } = require('@jest/globals');
 const {
   sanctuary: { add, compose: B, equals, fromMaybe, gt, is, Just, Nothing, pipe, size, splitOn }
   , sanctuaryDef: { Array, Number, String }
-  , utils: { allPass, anyPass, F, findEq, getEq, included, includes, map2, map3, mergeSingleton, noop, parallelAp, pluck, pReject, pResolve, substitution, T, tap, thrush, toMaybe, zipObj }
+  , utils: { allPass, anyPass, constFalse, constTrue, findEq, getEq, included, includes, map2, map3, mergeSingleton, noop, parallelAp, pluck, pReject, pResolve, S, T, tap, toMaybe, zipObj }
 } = require('.');
 
 const getStringLength = B(size)(splitOn(''));
@@ -19,9 +19,9 @@ describe('utils tests', () => {
 
   it('rejects a value', () => expect(pReject('value')).rejects.toMatch('value'));
 
-  it('always return true', () => expect(T('value')).toBe(true));
+  it('always return true', () => expect(constTrue('value')).toBe(true));
 
-  it('always return false', () => expect(F('value')).toBe(false));
+  it('always return false', () => expect(constFalse('value')).toBe(false));
 
   it('taps a function', () => {
     let a = 0;
@@ -30,14 +30,14 @@ describe('utils tests', () => {
     expect(a).toBe(3);
   });
 
-  it('thrush applies value first, then function', () => {
-    expect(thrush(3)(add(1))).toBe(4);
+  it('T (thrush) applies value first, then function', () => {
+    expect(T(3)(add(1))).toBe(4);
   });
 
-  it('substitution threads one value to two consumers', () => {
+  it('S (substitution) threads one value to two consumers', () => {
     const f = (x) => (y) => x + y;
     const g = (x) => x * 2;
-    expect(substitution(f)(g)(3)).toBe(9);
+    expect(S(f)(g)(3)).toBe(9);
   });
 
   describe('toMaybe tests', () => {
