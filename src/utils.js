@@ -5,7 +5,7 @@
  * @param {object} dependencies object containing the sanctuary (S) dependency.
  * @return {object} utils functions.
  */
-module.exports = ({ $: { Any, AnyFunction, Array, Boolean, create, env, Function, Maybe, Object, String },  S: { compose: B, equals, find, flip: C, fromMaybe, fromPairs, get, K, map, pipe, reduce, zip } }) => {
+module.exports = ({ $: { Any, AnyFunction, Array, Boolean, create, env, Function, Maybe, Object, String },  S: { compose: B, concat, equals, find, flip: C, fromMaybe, fromPairs, get, Just, K, map, Nothing, pipe, reduce, singleton, zip } }) => {
 
 
   const def = create ({ checkTypes: true, env });
@@ -22,6 +22,51 @@ module.exports = ({ $: { Any, AnyFunction, Array, Boolean, create, env, Function
  *
  */
   const tap = (f) => (a) => (f (a), a);
+
+  /**
+   *
+   * thrush :: a -> (a -> b) -> b
+   *
+   * The T combinator: value FIRST, then the function. Flip of application.
+   *
+   * @returns {Any}
+   *
+   */
+  const thrush = (x) => (f) => f (x);
+
+  /**
+   *
+   * substitution :: (a -> b -> c) -> (a -> b) -> a -> c
+   *
+   * The S combinator: threads one value to two consumers — f(x)(g(x)).
+   *
+   * @returns {Any}
+   *
+   */
+  const substitution = (f) => (g) => (x) => f (x) (g (x));
+
+  /**
+   *
+   * toMaybe :: (a -> Boolean) -> a -> Maybe a
+   *
+   * Predicate gate: Just(v) when pred(v) is true, Nothing otherwise.
+   *
+   * @returns {Maybe}
+   *
+   */
+  const toMaybe = (pred) => (v) => pred (v) ? Just (v) : Nothing;
+
+  /**
+   *
+   * mergeSingleton :: String -> a -> StrMap a -> StrMap a
+   *
+   * StrMap builder: creates a singleton {key: val} and returns a function that
+   * concats it onto an existing StrMap. Point-free: compose(compose(concat))(singleton).
+   *
+   * @returns {Function}
+   *
+   */
+  const mergeSingleton = B (B (concat)) (singleton);
 
   /**
    * This is the 'no operation' function. It just returns undefined.
@@ -204,6 +249,6 @@ module.exports = ({ $: { Any, AnyFunction, Array, Boolean, create, env, Function
   ([Function([Any, Boolean]), String, Array(Object), Array(Maybe(Any))])
   (pluckImpl)
 
-  return { allPass, anyPass, F, map2, map3, noop, parallelAp, pReject, pResolve, T, tap, zipObj, includes, included: C(includes), getEq, findEq, pluck };
+  return { allPass, anyPass, F, map2, map3, mergeSingleton, noop, parallelAp, pReject, pResolve, substitution, T, tap, thrush, toMaybe, zipObj, includes, included: C(includes), getEq, findEq, pluck };
 }
 

@@ -6,7 +6,7 @@ const { describe, expect, it } = require('@jest/globals');
 const {
   sanctuary: { add, compose: B, equals, fromMaybe, gt, is, Just, Nothing, pipe, size, splitOn }
   , sanctuaryDef: { Array, Number, String }
-  , utils: { allPass, anyPass, F, findEq, getEq, included, includes, map2, map3, noop, parallelAp, pluck, pReject, pResolve, T, tap, zipObj }
+  , utils: { allPass, anyPass, F, findEq, getEq, included, includes, map2, map3, mergeSingleton, noop, parallelAp, pluck, pReject, pResolve, substitution, T, tap, thrush, toMaybe, zipObj }
 } = require('.');
 
 const getStringLength = B(size)(splitOn(''));
@@ -28,6 +28,29 @@ describe('utils tests', () => {
     const funfun = tap((x) => (a = a + x));
     expect(funfun(3)).toBe(3);
     expect(a).toBe(3);
+  });
+
+  it('thrush applies value first, then function', () => {
+    expect(thrush(3)(add(1))).toBe(4);
+  });
+
+  it('substitution threads one value to two consumers', () => {
+    const f = (x) => (y) => x + y;
+    const g = (x) => x * 2;
+    expect(substitution(f)(g)(3)).toBe(9);
+  });
+
+  describe('toMaybe tests', () => {
+    it('returns Just when predicate is true', () => {
+      expect(toMaybe(is(Number))(42)).toEqual(Just(42));
+    });
+    it('returns Nothing when predicate is false', () => {
+      expect(toMaybe(is(Number))('nope')).toEqual(Nothing);
+    });
+  });
+
+  it('mergeSingleton builds a concat-ready StrMap', () => {
+    expect(mergeSingleton('a')('x')({ b: 'y' })).toEqual({ a: 'x', b: 'y' });
   });
 
   it('applies zipObj successfully', () =>
