@@ -41,15 +41,6 @@ const T = S.T;
 const substitution = (f) => (g) => (x) => f(x)(g(x));
 
 /**
- * apply :: a -> (a -> b) -> b
- *
- * Flip of identity application. S.flip(S.I).
- *
- * @returns {Any}
- */
-const apply = S.flip(S.I);
-
-/**
  * delayApply :: (a -> b) -> a -> (() -> b)
  *
  * Returns a thunk that captures x — retards evaluation so
@@ -495,7 +486,7 @@ const concat = S.concat;
 module.exports = {
 	$, S, def,
 	NumberRep, StringRep, BooleanRep, ObjectRep, ArrayRep, DateRep, NullRep, UndefinedRep,
-	T, substitution, apply, delayApply, mergeSingleton, constTrue, constFalse,
+	T, substitution, delayApply, mergeSingleton, constTrue, constFalse,
 	toMaybe, ValidDate, isValidDate,
 	isString, isBoolean, isObject, isArrayOf, isInt, isFiniteNumber, isNonNullable, isNonEmptyStr,
 	isDateStr, isIn, isInRange, record, replaceFirst, replaceNamed,
