@@ -1,410 +1,90 @@
-# convenient-fp-utils *1.0.0*
+# convenient-fp-utils
 
-> module that wraps different fp libraries together and adds some convenient functions
+Curated set of composable, type-safe utility functions built on top of [Sanctuary](https://sanctuary.js.org/) and [sanctuary-def](https://github.com/sanctuary-js/sanctuary-def).
 
+**Why not Ramda or lodash/fp?** They help write clean composable code, but it's not type-safe. Sanctuary gives us type-safe functions, and sanctuary-def lets us write type-safe functions of our own.
 
-### src/index.js
+## [Visual Reference](https://eckelon.github.io/convenient-fp-utils/)
 
+Interactive animated diagrams for every function — open it to understand what each one does at a glance.
 
-#### module.exports() 
+## Install
 
-Convenient FP Utils is a module that wraps different fp libraries together.
-
-**Why not ramda or lodash/fp?**
-
-I like ramda and lodash/fp; they're cool in most situations, but despite they help us to write clean and composable code, this code is not type-safe. Sanctuary allows us to write type-safe code with its functions, and with sanctuary-def we're able to write type-safe functions.
-
-
-
-
-
-
-##### Returns
-
-
-- `object`  all the convenient-fp-utils utilities
-
-
-
-
-### src/utils.js
-
-
-#### module.exports(dependencies) 
-
-This object offers a curated set of composable functions that we usually use.
-
-
-
-
-##### Parameters
-
-| Name | Type | Description |  |
-| ---- | ---- | ----------- | -------- |
-| dependencies | `object`  | object containing the sanctuary (S) dependency. | &nbsp; |
-
-
-
-
-##### Returns
-
-
-- `object`  utils functions.
-
-
-
-#### tap() 
-
-tap :: (a -> Any) -> a -> a
-
-Runs the given function with the supplied object, then returns the object.
-
-
-
-
-
-
-##### Returns
-
-
-- `Any`  returns what the function passed returns.
-
-
-
-#### noop() 
-
-This is the 'no operation' function. It just returns undefined.
-
-
-
-
-
-
-##### Returns
-
-
-- `Undefined`  
-
-
-
-#### T() 
-
-T :: Boolean b => a -> b
-
-Always returns true
-
-
-
-
-
-
-##### Returns
-
-
-- `Boolean`  
-
-
-
-#### F() 
-
-F :: Boolean b => a -> b
-
-Always returns false
-
-
-
-
-
-
-##### Returns
-
-
-- `Boolean`  
-
-
-
-#### zipObj() 
-
-zipObj :: Array -> Array -> Object
-
-Creates a new object out of a list of keys and a list of values. Key/value pairing is truncated to the length of the shorter of the two lists.
-
-```
-zipObj(['a', 'b', 'c'])([1, 2, 3]); //=> {a: 1, b: 2, c: 3}
+```sh
+npm install github:eckelon/convenient-fp-utils
 ```
 
+## Architecture
 
+Single source file: `src/utils.js` (CommonJS). Browser ESM is generated at build time via sed transformation (CJS `require` → `window.*` globals).
 
+## Functions
 
+### Combinators
 
+| Function | Signature | Description |
+|----------|-----------|-------------|
+| `T` | `a → (a → b) → b` | Thrush — value first, then function |
+| `substitution` | `(a → b → c) → (a → b) → a → c` | S combinator — threads `x` to two consumers: `f(x)(g(x))` |
+| `delayApply` | `(a → b) → a → (() → b)` | Captures arg in a thunk (for encase) |
+| `mergeSingleton` | `String → a → StrMap a → StrMap a` | Build `{k: v}` and concat onto a StrMap |
+| `constTrue` | `a → Boolean` | `K(true)` — always true |
+| `constFalse` | `a → Boolean` | `K(false)` — always false |
 
-##### Returns
+### Maybe
 
+| Function | Signature | Description |
+|----------|-----------|-------------|
+| `toMaybe` | `(a → Boolean) → a → Maybe a` | Predicate gate: `Just(v)` or `Nothing` |
+| `safeGet` | `(a → Boolean) → String → Any → Maybe a` | Total property accessor (never throws) |
+| `equalsNonNull` | `a → Any → Boolean` | `S.equals` that doesn't throw on null |
+| `firstOf` | `[a] → Maybe a` | `S.head` |
+| `secondOf` | `[a] → Maybe a` | Second element via tail + head |
 
-- `Object`  
+### Guards
 
+Total predicates — never throw, always return `Boolean`.
 
+`isString` · `isBoolean` · `isObject` · `isArrayOf` · `isInt` · `isFiniteNumber` · `isNonNullable` · `isNonEmptyStr` · `isDateStr` · `isIn` · `isInRange` · `record`
 
-#### pResolve() 
+### Parse
 
-pResolve :: a -> Promise
+| Function | Signature | Description |
+|----------|-----------|-------------|
+| `parseFloatM` | `String → Maybe FiniteNumber` | Total float parser |
+| `parseIntM` | `(String, Number, Number) → Maybe Integer` | Range-bounded int parser |
 
-It returns a promise that resolves with the given param
+### Collections
 
+| Function | Signature | Description |
+|----------|-----------|-------------|
+| `allPass` | `[a → Boolean] → a → Boolean` | AND of predicates |
+| `anyPass` | `[a → Boolean] → a → Boolean` | OR of predicates |
+| `getEq` | `(a → Boolean) → String → Any → Any → Boolean` | Property equality check |
+| `findEq` | `(a → Boolean) → String → Any → [Object] → Maybe Object` | Find by property value |
+| `pluck` | `(a → Boolean) → String → [Object] → [Maybe a]` | Extract property from array |
+| `zipObj` | `[String] → [a] → StrMap a` | Keys + values → object |
+| `map2` | `(a → b) → f (f a) → f (f b)` | Map over nested functor |
+| `parallelAp` | `(a → b) → (a → c) → a → [b, c]` | Two functions, one value, array of results |
 
+### Effects
 
+| Function | Signature | Description |
+|----------|-----------|-------------|
+| `tap` | `(a → Any) → a → a` | Side-effect, return unchanged |
+| `noop` | `() → undefined` | No-op |
+| `encaseStorage` | `(() → a) → Either Error a` | Wrap throwing thunk in Either |
+| `readStorage` | `String → () → String\|null` | localStorage getter thunk |
+| `writeStorage` | `String → String → Either Error ()` | Total localStorage setter |
+| `entriesOf` | `StrMap Any → [[String, Any]]` | Object.entries for heterogeneous StrMaps |
+| `rafThrottle` | `Function → Function` | requestAnimationFrame throttle |
+| `replaceFirst` | `RegExp → String → String → String` | Curried regex replace |
+| `replaceNamed` | `String → String → String → String` | Curried literal replace |
 
+### Sanctuary re-exports
 
+Bare-name re-exports for convenience: `pipe`, `compose`, `map`, `chain`, `reduce`, `filter`, `find`, `fromMaybe`, `maybe`, `either`, `K`, `I`, `flip`, `equals`, `append`, `reject`, `head`, `tail`, `last`, `init`, and more.
 
-##### Returns
+## License
 
-
-- `Promise`  
-
-
-
-#### pReject() 
-
-pReject :: a -> Promise
-
-It returns a promise that rejects with the given param
-
-
-
-
-
-
-##### Returns
-
-
-- `Promise`  
-
-
-
-#### map2() 
-
-map2 :: Functor f => (a -> b) -> f a -> f b
-
-Takes a function and a functor with another functor inside, applies the function to each of the deepest functor's values, and returns a functor of the same shape than the top functor.
-
-
-
-
-
-
-##### Returns
-
-
-- `Functor`  
-
-
-
-#### map3() 
-
-map2 :: Functor f => (a -> b) -> f a -> f b
-
-Takes a function and a functor with two nested functors inside, applies the function to each of the deepest functor's values, and returns a functor of the same shape than the top functor.
-
-
-
-
-
-
-##### Returns
-
-
-- `Functor`  
-
-
-
-#### allPass() 
-
-allPass :: Any a => Boolean b =>  [(a -> b)] -> (a -> b)
-
-Takes a list of predicates and returns a predicate that returns true for a given list of arguments if every one of the provided predicates is satisfied by those arguments. False otherwise.
-
-
-
-
-
-
-##### Returns
-
-
-- `Boolean`  
-
-
-
-#### anyPass() 
-
-anyPass :: Any a => Boolean b =>  [(a -> b)] -> (a -> b)
-
-Takes a list of predicates and returns a predicate that returns true for a given list of arguments if at least one of the provided predicates is satisfied by those arguments. False otherwise.
-
-
-
-
-
-
-##### Returns
-
-
-- `Boolean`  
-
-
-
-#### parallelAp() 
-
-parallelAp :: Function f => Function g => Any a => Array(a)
-
-Takes two functions and applies them to the same given value, returning an array of results
-
-
-
-
-
-
-##### Returns
-
-
-- `Array`  
-
-
-
-#### includes() 
-
-includes :: Any => Array Any => Boolean
-
-Takes a value and an array and returns True if the value is contained in the array. False otherwise.
-
-
-
-
-
-
-##### Returns
-
-
-- `Boolean`  
-
-
-
-#### getEq() 
-
-getEq :: Function => String => Any => Object => Maybe Boolean
-
-Returns true if the specified object property is equal, in S.equals terms, to the given value; false otherwise.
-
-
-
-
-
-
-##### Returns
-
-
--  Boolean
-
-
-
-#### findEq() 
-
-findEq :: Function Boolean => String => Any => Array Object => Maybe Boolean
-
-Takes a predicate, a field name, a value and an object array and returns Just the leftmost object of the array which field equals the desired value; Nothing otherwise.
-
-
-
-
-
-
-##### Returns
-
-
--  Maybe
-
-
-
-#### pluck() 
-
-pluck :: Function Boolean => String => Array Maybe Any
-
-Returns a new list by plucking the same named property off all objects in the list supplied.
-
-
-
-
-
-
-##### Returns
-
-
--  Array
-
-
-
-
-### src/http.js
-
-
-#### module.exports(dependencies) 
-
-This object offers a curated set of composable functions to make http-requests with fetch API
-
-
-
-
-##### Parameters
-
-| Name | Type | Description |  |
-| ---- | ---- | ----------- | -------- |
-| dependencies | `object`  | object containing the fluture and sanctuary (S) dependencies. | &nbsp; |
-
-
-
-
-##### Returns
-
-
-- `object`  http functions.
-
-
-
-#### doGet() 
-
-doGet :: Promise b => a -> b
-
-It makes a GET http request and returns a promise result
-
-
-
-
-
-
-##### Returns
-
-
-- `Promise`  
-
-
-
-#### doPost() 
-
-doPost :: Promise c => a -> b -> c
-
-It makes a POST http request with data as body, and returns a promise result
-
-
-
-
-
-
-##### Returns
-
-
-- `Promise`  
-
-
-
-
-*Documentation generated with [doxdox](https://github.com/neogeek/doxdox).*
+MIT

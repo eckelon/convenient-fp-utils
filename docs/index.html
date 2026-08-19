@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>convenient-fp-utils — Visual Reference</title>
+<style>
+	:root {
+		--bg: #0d1117;
+		--surface: #161b22;
+		--border: #30363d;
+		--text: #e6edf3;
+		--muted: #8b949e;
+		--blue: #58a6ff;
+		--green: #3fb950;
+		--purple: #bc8cff;
+		--orange: #d29922;
+		--red: #f85149;
+		--cyan: #39d2c0;
+		--pink: #f778ba;
+		--radius: 8px;
+	}
+	* { box-sizing: border-box; margin: 0; padding: 0; }
+	body {
+		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+		background: var(--bg);
+		color: var(--text);
+		line-height: 1.6;
+		display: flex;
+		min-height: 100vh;
+	}
+
+	/* ---- NAV ---- */
+	nav {
+		width: 240px;
+		min-width: 240px;
+		background: var(--surface);
+		border-right: 1px solid var(--border);
+		padding: 24px 16px;
+		position: sticky;
+		top: 0;
+		height: 100vh;
+		overflow-y: auto;
+	}
+	nav h2 { font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 8px; }
+	nav h2:first-child { margin-top: 0; }
+	nav a {
+		display: block;
+		padding: 4px 8px;
+		color: var(--blue);
+		text-decoration: none;
+		font-size: 13px;
+		font-family: "SF Mono", "Fira Code", monospace;
+		border-radius: 4px;
+	}
+	nav a:hover { background: rgba(88,166,255,0.1); }
+
+	/* ---- MAIN ---- */
+	main {
+		flex: 1;
+		padding: 32px 48px;
+		max-width: 960px;
+	}
+	main > h1 {
+		font-size: 28px;
+		margin-bottom: 8px;
+	}
+	main > p.subtitle {
+		color: var(--muted);
+		margin-bottom: 40px;
+		font-size: 15px;
+	}
+
+	/* ---- CARD ---- */
+	.card {
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		padding: 24px;
+		margin-bottom: 24px;
+	}
+	.card h3 {
+		font-family: "SF Mono", "Fira Code", monospace;
+		font-size: 18px;
+		color: var(--green);
+		margin-bottom: 4px;
+	}
+	.card .sig {
+		font-family: "SF Mono", "Fira Code", monospace;
+		font-size: 13px;
+		color: var(--muted);
+		margin-bottom: 12px;
+	}
+	.card .desc {
+		font-size: 14px;
+		color: var(--text);
+		margin-bottom: 16px;
+		line-height: 1.5;
+	}
+
+	/* ---- DIAGRAM ---- */
+	.diagram {
+		background: rgba(0,0,0,0.3);
+		border-radius: var(--radius);
+		padding: 24px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 12px;
+		min-height: 80px;
+		flex-wrap: wrap;
+		position: relative;
+		overflow: hidden;
+	}
+	.diagram.col {
+		flex-direction: column;
+	}
+
+	/* ---- PILLS ---- */
+	.pill {
+		display: inline-flex;
+		align-items: center;
+		padding: 6px 14px;
+		border-radius: 20px;
+		font-family: "SF Mono", "Fira Code", monospace;
+		font-size: 13px;
+		font-weight: 600;
+		white-space: nowrap;
+	}
+	.pill.val { background: rgba(88,166,255,0.15); color: var(--blue); border: 1px solid rgba(88,166,255,0.3); }
+	.pill.fn { background: rgba(63,185,80,0.15); color: var(--green); border: 1px solid rgba(63,185,80,0.3); }
+	.pill.out { background: rgba(188,140,255,0.15); color: var(--purple); border: 1px solid rgba(188,140,255,0.3); }
+	.pill.just { background: rgba(210,153,34,0.15); color: var(--orange); border: 1px solid rgba(210,153,34,0.3); }
+	.pill.nothing { background: rgba(139,148,158,0.15); color: var(--muted); border: 1px solid rgba(139,148,158,0.3); }
+	.pill.ok { background: rgba(63,185,80,0.15); color: var(--green); border: 1px solid rgba(63,185,80,0.3); }
+	.pill.err { background: rgba(248,81,73,0.15); color: var(--red); border: 1px solid rgba(248,81,73,0.3); }
+	.pill.obj { background: rgba(57,210,192,0.15); color: var(--cyan); border: 1px solid rgba(57,210,192,0.3); }
+
+	/* ---- ARROW ---- */
+	.arrow {
+		color: var(--muted);
+		font-size: 20px;
+		flex-shrink: 0;
+	}
+
+	/* ---- FLOW ROW ---- */
+	.flow {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+
+	/* ---- ANIMATIONS ---- */
+	@keyframes fadeSlideIn {
+		from { opacity: 0; transform: translateX(-16px); }
+		to { opacity: 1; transform: translateX(0); }
+	}
+	@keyframes fadeSlideUp {
+		from { opacity: 0; transform: translateY(10px); }
+		to { opacity: 1; transform: translateY(0); }
+	}
+	@keyframes pulse {
+		0%, 100% { transform: scale(1); }
+		50% { transform: scale(1.08); }
+	}
+	@keyframes glow {
+		0%, 100% { box-shadow: 0 0 0 0 transparent; }
+		50% { box-shadow: 0 0 12px 2px rgba(88,166,255,0.3); }
+	}
+	@keyframes flowRight {
+		0% { opacity: 0; transform: translateX(-30px); }
+		30% { opacity: 1; transform: translateX(0); }
+		70% { opacity: 1; transform: translateX(0); }
+		100% { opacity: 0; transform: translateX(30px); }
+	}
+	@keyframes branchDown {
+		0% { opacity: 0; transform: translateY(-12px); }
+		40% { opacity: 1; transform: translateY(0); }
+		100% { opacity: 1; transform: translateY(0); }
+	}
+
+	.anim-flow .step { opacity: 0; animation: fadeSlideIn 0.5s ease forwards; }
+	.anim-flow .step:nth-child(1) { animation-delay: 0s; }
+	.anim-flow .step:nth-child(2) { animation-delay: 0.3s; }
+	.anim-flow .step:nth-child(3) { animation-delay: 0.6s; }
+	.anim-flow .step:nth-child(4) { animation-delay: 0.9s; }
+	.anim-flow .step:nth-child(5) { animation-delay: 1.2s; }
+	.anim-flow .step:nth-child(6) { animation-delay: 1.5s; }
+	.anim-flow .step:nth-child(7) { animation-delay: 1.8s; }
+	.anim-flow .step:nth-child(8) { animation-delay: 2.1s; }
+	.anim-flow .step:nth-child(9) { animation-delay: 2.4s; }
+
+	.anim-pulse .pulse-target {
+		animation: pulse 2s ease-in-out infinite;
+	}
+
+	/* ---- BRANCH DIAGRAM (substitution) ---- */
+	.branch-diagram {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 8px;
+	}
+	.branch-row {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+	.branch-line {
+		width: 2px;
+		height: 20px;
+		background: var(--muted);
+		opacity: 0.4;
+	}
+	.branch-fork {
+		display: flex;
+		gap: 40px;
+		position: relative;
+	}
+	.branch-fork::before {
+		content: '';
+		position: absolute;
+		top: -10px;
+		left: 25%;
+		right: 25%;
+		height: 2px;
+		background: var(--muted);
+		opacity: 0.4;
+	}
+	.branch-fork > div {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 6px;
+	}
+	.branch-fork > div::before {
+		content: '';
+		width: 2px;
+		height: 10px;
+		background: var(--muted);
+		opacity: 0.4;
+	}
+
+	/* ---- EXAMPLES ---- */
+	.example {
+		margin-top: 12px;
+		padding: 12px 16px;
+		background: rgba(0,0,0,0.2);
+		border-radius: 6px;
+		font-family: "SF Mono", "Fira Code", monospace;
+		font-size: 12px;
+		color: var(--muted);
+		line-height: 1.8;
+	}
+	.example .hl-val { color: var(--blue); }
+	.example .hl-fn { color: var(--green); }
+	.example .hl-out { color: var(--purple); }
+	.example .hl-just { color: var(--orange); }
+	.example .hl-comment { color: #484f58; }
+
+	/* ---- CATEGORY HEADER ---- */
+	.cat-header {
+		font-size: 20px;
+		color: var(--muted);
+		margin: 40px 0 16px;
+		padding-bottom: 8px;
+		border-bottom: 1px solid var(--border);
+	}
+	.cat-header:first-of-type { margin-top: 0; }
+
+	/* ---- RESPONSIVE ---- */
+	@media (max-width: 768px) {
+		body { flex-direction: column; }
+		nav { width: 100%; min-width: unset; height: auto; position: static; display: flex; flex-wrap: wrap; gap: 4px; padding: 12px; }
+		nav h2 { width: 100%; }
+		main { padding: 20px; }
+	}
+
+	/* ---- REPLAY ---- */
+	.replay-btn {
+		position: absolute;
+		top: 8px;
+		right: 8px;
+		background: rgba(255,255,255,0.05);
+		border: 1px solid var(--border);
+		color: var(--muted);
+		border-radius: 4px;
+		padding: 2px 8px;
+		font-size: 11px;
+		cursor: pointer;
+	}
+	.replay-btn:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+
+	/* ---- TABLE (guards) ---- */
+	.guard-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+		gap: 8px;
+	}
+	.guard-cell {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 8px 12px;
+		background: rgba(0,0,0,0.2);
+		border-radius: 6px;
+		font-family: "SF Mono", "Fira Code", monospace;
+		font-size: 12px;
+	}
+	.guard-cell .g-name { color: var(--green); min-width: 70px; }
+	.guard-cell .g-in { color: var(--blue); }
+	.guard-cell .g-arrow { color: var(--muted); }
+	.guard-cell .g-ok { color: var(--green); }
+	.guard-cell .g-no { color: var(--red); }
+</style>
+</head>
+<body>
+
+<nav>
+	<h2>Combinators</h2>
+	<a href="#T">T</a>
+	<a href="#substitution">substitution</a>
+	<a href="#delayApply">delayApply</a>
+	<a href="#constTrue">constTrue / constFalse</a>
+	<a href="#mergeSingleton">mergeSingleton</a>
+	<h2>Maybe</h2>
+	<a href="#toMaybe">toMaybe</a>
+	<a href="#safeGet">safeGet</a>
+	<a href="#equalsNonNull">equalsNonNull</a>
+	<a href="#firstOf">firstOf / secondOf</a>
+	<h2>Guards</h2>
+	<a href="#guards">Type guards</a>
+	<a href="#isInRange">isInRange</a>
+	<a href="#record">record</a>
+	<h2>Parse</h2>
+	<a href="#parseFloatM">parseFloatM</a>
+	<a href="#parseIntM">parseIntM</a>
+	<h2>Collections</h2>
+	<a href="#allPass">allPass / anyPass</a>
+	<a href="#getEq">getEq</a>
+	<a href="#findEq">findEq</a>
+	<a href="#pluck">pluck</a>
+	<a href="#zipObj">zipObj</a>
+	<a href="#map2">map2</a>
+	<a href="#parallelAp">parallelAp</a>
+	<h2>Effects</h2>
+	<a href="#tap">tap</a>
+	<a href="#encaseStorage">encaseStorage</a>
+	<a href="#readStorage">readStorage</a>
+	<a href="#entriesOf">entriesOf</a>
+	<a href="#rafThrottle">rafThrottle</a>
+	<a href="#replaceFirst">replaceFirst / replaceNamed</a>
+</nav>
+
+<main>
+<h1>convenient-fp-utils</h1>
+<p class="subtitle">Visual reference — animated diagrams for every function</p>
+
+<!-- ================================================================== -->
+<!-- COMBINATORS                                                         -->
+<!-- ================================================================== -->
+<h2 class="cat-header" id="combinators-section">Combinators</h2>
+
+<!-- T -->
+<div class="card" id="T">
+	<h3>T</h3>
+	<div class="sig">T :: a &rarr; (a &rarr; b) &rarr; b</div>
+	<div class="desc">Thrush combinator. Value first, function second. Flips application order so you can write <code>T(data)(pipeline)</code> instead of <code>pipeline(data)</code>.</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<span class="step pill val">3</span>
+		<span class="step arrow">&rarr;</span>
+		<span class="step pill fn">T</span>
+		<span class="step arrow">&rarr;</span>
+		<span class="step pill fn">x &rarr; x + 1</span>
+		<span class="step arrow">&rarr;</span>
+		<span class="step pill out">4</span>
+	</div>
+	<div class="example">
+		<span class="hl-fn">T</span>(<span class="hl-val">3</span>)(x =&gt; x + 1)&nbsp; <span class="hl-comment">// =&gt;</span> <span class="hl-out">4</span><br>
+		<span class="hl-fn">T</span>(<span class="hl-val">input</span>)(<span class="hl-fn">pipe</span>([parse, validate, render]))&nbsp; <span class="hl-comment">// data-first pipeline</span>
+	</div>
+</div>
+
+<!-- substitution -->
+<div class="card" id="substitution">
+	<h3>substitution</h3>
+	<div class="sig">substitution :: (a &rarr; b &rarr; c) &rarr; (a &rarr; b) &rarr; a &rarr; c</div>
+	<div class="desc">S combinator (Starling). Threads one value <code>x</code> to two consumers: <code>f(x)(g(x))</code>. The value branches — one copy goes to <code>g</code>, the result feeds into <code>f(x)</code>.</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<div class="branch-diagram">
+			<div class="step branch-row">
+				<span class="pill val">x = 5</span>
+			</div>
+			<div class="step branch-line"></div>
+			<div class="step branch-fork">
+				<div>
+					<span class="pill fn">f(x) = add(5)</span>
+				</div>
+				<div>
+					<span class="pill fn">g(x) = double(5) = 10</span>
+				</div>
+			</div>
+			<div class="step branch-line"></div>
+			<div class="step branch-row">
+				<span class="pill fn">f(x)(g(x)) = add(5)(10)</span>
+			</div>
+			<div class="step branch-line"></div>
+			<div class="step branch-row">
+				<span class="pill out">15</span>
+			</div>
+		</div>
+	</div>
+	<div class="example">
+		<span class="hl-comment">// f = add, g = double</span><br>
+		<span class="hl-fn">substitution</span>(<span class="hl-fn">add</span>)(<span class="hl-fn">double</span>)(<span class="hl-val">5</span>)&nbsp; <span class="hl-comment">// =&gt; add(5)(double(5)) =&gt; add(5)(10) =&gt;</span> <span class="hl-out">15</span><br><br>
+		<span class="hl-comment">// real-world: thread err to both default builder and Maybe chain</span><br>
+		<span class="hl-fn">substitution</span>(<span class="hl-fn">compose(fromMaybe)(String)</span>)(<span class="hl-fn">pipe([toMaybe(isObject), chainErrMsg])</span>)
+	</div>
+</div>
+
+<!-- delayApply -->
+<div class="card" id="delayApply">
+	<h3>delayApply</h3>
+	<div class="sig">delayApply :: (a &rarr; b) &rarr; a &rarr; (() &rarr; b)</div>
+	<div class="desc">Captures the argument in a thunk, delaying evaluation. Useful with <code>encase</code> — exceptions land inside the Future instead of blowing up immediately.</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<span class="step pill fn">JSON.parse</span>
+		<span class="step arrow">&rarr;</span>
+		<span class="step pill val">"bad json"</span>
+		<span class="step arrow">&rarr;</span>
+		<span class="step pill obj">() =&gt; JSON.parse("bad json")</span>
+		<span class="step arrow">&#x1f6d1;</span>
+		<span class="step pill err">not called yet!</span>
+	</div>
+	<div class="example">
+		<span class="hl-fn">delayApply</span>(JSON.parse)(<span class="hl-val">"bad"</span>)&nbsp; <span class="hl-comment">// =&gt; () =&gt; JSON.parse("bad")</span><br>
+		<span class="hl-comment">// the thunk is safe to pass to encase — exception is caught</span><br>
+		<span class="hl-fn">encase</span>(<span class="hl-fn">delayApply</span>(JSON.parse)(<span class="hl-val">"bad"</span>))()&nbsp; <span class="hl-comment">// =&gt; Left(SyntaxError)</span>
+	</div>
+</div>
+
+<!-- constTrue / constFalse -->
+<div class="card" id="constTrue">
+	<h3>constTrue / constFalse</h3>
+	<div class="sig">constTrue :: a &rarr; Boolean &nbsp;&nbsp;|&nbsp;&nbsp; constFalse :: a &rarr; Boolean</div>
+	<div class="desc"><code>K(true)</code> and <code>K(false)</code>. Ignore the argument, always return the same boolean. Useful as fallback predicates.</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<div style="display:flex; flex-direction:column; gap:12px; align-items:center;">
+			<div class="flow step">
+				<span class="pill val">"anything"</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill fn">constTrue</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill ok">true</span>
+			</div>
+			<div class="flow step">
+				<span class="pill val">42</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill fn">constTrue</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill ok">true</span>
+			</div>
+			<div class="flow step">
+				<span class="pill val">null</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill fn">constFalse</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill err">false</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- mergeSingleton -->
+<div class="card" id="mergeSingleton">
+	<h3>mergeSingleton</h3>
+	<div class="sig">mergeSingleton :: String &rarr; a &rarr; StrMap a &rarr; StrMap a</div>
+	<div class="desc">Builds a singleton <code>{key: val}</code> and concats it onto an existing StrMap. Point-free: <code>compose(compose(concat))(singleton)</code>.</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<span class="step pill val">"age"</span>
+		<span class="step arrow">&rarr;</span>
+		<span class="step pill val">30</span>
+		<span class="step arrow">&rarr;</span>
+		<span class="step pill obj">{age: 30}</span>
+		<span class="step arrow">++</span>
+		<span class="step pill obj">{name: "Ana"}</span>
+		<span class="step arrow">=</span>
+		<span class="step pill out">{name: "Ana", age: 30}</span>
+	</div>
+	<div class="example">
+		<span class="hl-fn">mergeSingleton</span>(<span class="hl-val">"age"</span>)(<span class="hl-val">30</span>)({ name: <span class="hl-val">"Ana"</span> })&nbsp; <span class="hl-comment">// =&gt;</span> <span class="hl-out">{ name: "Ana", age: 30 }</span>
+	</div>
+</div>
+
+<!-- ================================================================== -->
+<!-- MAYBE                                                               -->
+<!-- ================================================================== -->
+<h2 class="cat-header" id="maybe-section">Maybe</h2>
+
+<!-- toMaybe -->
+<div class="card" id="toMaybe">
+	<h3>toMaybe</h3>
+	<div class="sig">toMaybe :: (a &rarr; Boolean) &rarr; a &rarr; Maybe a</div>
+	<div class="desc">Predicate gate: <code>Just(v)</code> when the predicate passes, <code>Nothing</code> otherwise. The universal entry point into Maybe land.</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<div style="display:flex; flex-direction:column; gap:12px; align-items:center;">
+			<div class="flow step">
+				<span class="pill fn">isString</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill val">"hello"</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill ok">&#10003; pred</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill just">Just("hello")</span>
+			</div>
+			<div class="flow step">
+				<span class="pill fn">isString</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill val">42</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill err">&#10007; pred</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill nothing">Nothing</span>
+			</div>
+		</div>
+	</div>
+	<div class="example">
+		<span class="hl-fn">toMaybe</span>(<span class="hl-fn">isString</span>)(<span class="hl-val">"hello"</span>)&nbsp; <span class="hl-comment">// =&gt;</span> <span class="hl-just">Just("hello")</span><br>
+		<span class="hl-fn">toMaybe</span>(<span class="hl-fn">isString</span>)(<span class="hl-val">42</span>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="hl-comment">// =&gt;</span> Nothing
+	</div>
+</div>
+
+<!-- safeGet -->
+<div class="card" id="safeGet">
+	<h3>safeGet</h3>
+	<div class="sig">safeGet :: (a &rarr; Boolean) &rarr; String &rarr; Any &rarr; Maybe a</div>
+	<div class="desc">Total property accessor. Checks the object is valid, extracts the key, validates with the predicate. Any failure &rarr; <code>Nothing</code>. Never throws.</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<div style="display:flex; flex-direction:column; gap:12px; align-items:center;">
+			<div class="flow step">
+				<span class="pill fn">isString</span>
+				<span class="pill val">"name"</span>
+				<span class="pill obj">{name: "Ana"}</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill just">Just("Ana")</span>
+			</div>
+			<div class="flow step">
+				<span class="pill fn">isString</span>
+				<span class="pill val">"name"</span>
+				<span class="pill obj">{name: 42}</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill nothing">Nothing</span>
+			</div>
+			<div class="flow step">
+				<span class="pill fn">isString</span>
+				<span class="pill val">"name"</span>
+				<span class="pill err">null</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill nothing">Nothing</span>
+			</div>
+		</div>
+	</div>
+	<div class="example">
+		<span class="hl-fn">safeGet</span>(<span class="hl-fn">isString</span>)(<span class="hl-val">"name"</span>)({ name: <span class="hl-val">"Ana"</span> })&nbsp; <span class="hl-comment">// =&gt;</span> <span class="hl-just">Just("Ana")</span><br>
+		<span class="hl-fn">safeGet</span>(<span class="hl-fn">isString</span>)(<span class="hl-val">"name"</span>)({ name: 42 })&nbsp;&nbsp;&nbsp;&nbsp; <span class="hl-comment">// =&gt;</span> Nothing<br>
+		<span class="hl-fn">safeGet</span>(<span class="hl-fn">isString</span>)(<span class="hl-val">"name"</span>)(null)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="hl-comment">// =&gt;</span> Nothing <span class="hl-comment">(no throw!)</span>
+	</div>
+</div>
+
+<!-- equalsNonNull -->
+<div class="card" id="equalsNonNull">
+	<h3>equalsNonNull</h3>
+	<div class="sig">equalsNonNull :: a &rarr; Any &rarr; Boolean</div>
+	<div class="desc"><code>S.equals</code> throws on <code>null</code>/<code>undefined</code> (not Setoid). This gates non-nullable first, returning <code>false</code> instead of throwing.</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<div style="display:flex; flex-direction:column; gap:12px; align-items:center;">
+			<div class="flow step">
+				<span class="pill val">"a"</span>
+				<span class="pill val">"a"</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill ok">true</span>
+			</div>
+			<div class="flow step">
+				<span class="pill val">"a"</span>
+				<span class="pill val">null</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill err">false</span>
+				<span style="font-size:11px;color:var(--muted)">(no throw)</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- firstOf / secondOf -->
+<div class="card" id="firstOf">
+	<h3>firstOf / secondOf</h3>
+	<div class="sig">firstOf :: Array a &rarr; Maybe a &nbsp;&nbsp;|&nbsp;&nbsp; secondOf :: Array a &rarr; Maybe a</div>
+	<div class="desc">Total array accessors. <code>firstOf</code> = <code>S.head</code>. <code>secondOf</code> = compose <code>tail</code> then <code>head</code> (S.nth doesn't exist in v3.1.0).</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<div style="display:flex; flex-direction:column; gap:12px; align-items:center;">
+			<div class="flow step">
+				<span class="pill val">["a", "b", "c"]</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill fn">firstOf</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill just">Just("a")</span>
+			</div>
+			<div class="flow step">
+				<span class="pill val">["a", "b", "c"]</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill fn">secondOf</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill just">Just("b")</span>
+			</div>
+			<div class="flow step">
+				<span class="pill val">[]</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill fn">firstOf</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill nothing">Nothing</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- ================================================================== -->
+<!-- GUARDS                                                              -->
+<!-- ================================================================== -->
+<h2 class="cat-header" id="guards-section">Guards</h2>
+
+<!-- guards grid -->
+<div class="card" id="guards">
+	<h3>Type Guards</h3>
+	<div class="sig">guard :: Any &rarr; Boolean</div>
+	<div class="desc">Total predicates — never throw. Each wraps <code>S.is(TypeRep)</code> or a custom check with <code>sanctuary-def</code> type checking.</div>
+	<div class="diagram" style="padding: 16px;">
+		<div class="guard-grid">
+			<div class="guard-cell"><span class="g-name">isString</span><span class="g-in">"hi"</span><span class="g-arrow">&rarr;</span><span class="g-ok">true</span></div>
+			<div class="guard-cell"><span class="g-name">isString</span><span class="g-in">42</span><span class="g-arrow">&rarr;</span><span class="g-no">false</span></div>
+			<div class="guard-cell"><span class="g-name">isBoolean</span><span class="g-in">true</span><span class="g-arrow">&rarr;</span><span class="g-ok">true</span></div>
+			<div class="guard-cell"><span class="g-name">isBoolean</span><span class="g-in">0</span><span class="g-arrow">&rarr;</span><span class="g-no">false</span></div>
+			<div class="guard-cell"><span class="g-name">isObject</span><span class="g-in">{}</span><span class="g-arrow">&rarr;</span><span class="g-ok">true</span></div>
+			<div class="guard-cell"><span class="g-name">isObject</span><span class="g-in">[]</span><span class="g-arrow">&rarr;</span><span class="g-no">false</span></div>
+			<div class="guard-cell"><span class="g-name">isInt</span><span class="g-in">3</span><span class="g-arrow">&rarr;</span><span class="g-ok">true</span></div>
+			<div class="guard-cell"><span class="g-name">isInt</span><span class="g-in">3.5</span><span class="g-arrow">&rarr;</span><span class="g-no">false</span></div>
+			<div class="guard-cell"><span class="g-name">isFiniteNumber</span><span class="g-in">3.5</span><span class="g-arrow">&rarr;</span><span class="g-ok">true</span></div>
+			<div class="guard-cell"><span class="g-name">isFiniteNumber</span><span class="g-in">NaN</span><span class="g-arrow">&rarr;</span><span class="g-no">false</span></div>
+			<div class="guard-cell"><span class="g-name">isNonEmptyStr</span><span class="g-in">"x"</span><span class="g-arrow">&rarr;</span><span class="g-ok">true</span></div>
+			<div class="guard-cell"><span class="g-name">isNonEmptyStr</span><span class="g-in">""</span><span class="g-arrow">&rarr;</span><span class="g-no">false</span></div>
+			<div class="guard-cell"><span class="g-name">isNonNullable</span><span class="g-in">"x"</span><span class="g-arrow">&rarr;</span><span class="g-ok">true</span></div>
+			<div class="guard-cell"><span class="g-name">isNonNullable</span><span class="g-in">null</span><span class="g-arrow">&rarr;</span><span class="g-no">false</span></div>
+			<div class="guard-cell"><span class="g-name">isDateStr</span><span class="g-in">"2026-08-17"</span><span class="g-arrow">&rarr;</span><span class="g-ok">true</span></div>
+			<div class="guard-cell"><span class="g-name">isDateStr</span><span class="g-in">"2026-02-30"</span><span class="g-arrow">&rarr;</span><span class="g-no">false</span></div>
+			<div class="guard-cell"><span class="g-name">isIn</span><span class="g-in">["a","b"]("a")</span><span class="g-arrow">&rarr;</span><span class="g-ok">true</span></div>
+			<div class="guard-cell"><span class="g-name">isIn</span><span class="g-in">["a","b"]("c")</span><span class="g-arrow">&rarr;</span><span class="g-no">false</span></div>
+		</div>
+	</div>
+	<div class="example">
+		<span class="hl-comment">// isArrayOf: higher-order guard — takes a predicate</span><br>
+		<span class="hl-fn">isArrayOf</span>(<span class="hl-fn">isString</span>)([<span class="hl-val">"a"</span>, <span class="hl-val">"b"</span>])&nbsp; <span class="hl-comment">// =&gt;</span> <span class="hl-out">true</span><br>
+		<span class="hl-fn">isArrayOf</span>(<span class="hl-fn">isString</span>)([<span class="hl-val">"a"</span>, <span class="hl-val">1</span>])&nbsp;&nbsp; <span class="hl-comment">// =&gt;</span> false
+	</div>
+</div>
+
+<!-- isInRange -->
+<div class="card" id="isInRange">
+	<h3>isInRange</h3>
+	<div class="sig">isInRange :: FiniteNumber &rarr; FiniteNumber &rarr; Any &rarr; Boolean</div>
+	<div class="desc">Inclusive range check. Also validates the input is a finite number — <code>NaN</code>, <code>Infinity</code>, strings all return <code>false</code>.</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<div style="display:flex; flex-direction:column; gap:10px; align-items:center; width:100%;">
+			<div style="display:flex; align-items:center; gap:6px; width:100%; max-width:500px;">
+				<span style="width:30px; text-align:right; font-size:12px; color:var(--muted);">0</span>
+				<div style="flex:1; height:8px; background:var(--border); border-radius:4px; position:relative; overflow:hidden;">
+					<div class="step" style="position:absolute; left:10%; right:10%; top:0; bottom:0; background:rgba(63,185,80,0.3); border-radius:4px; animation: fadeSlideIn 0.5s ease forwards;"></div>
+					<div class="step" style="position:absolute; left:48%; top:-4px; width:16px; height:16px; background:var(--blue); border-radius:50%; animation: fadeSlideIn 0.5s 0.6s ease forwards; opacity:0;"></div>
+				</div>
+				<span style="width:30px; font-size:12px; color:var(--muted);">100</span>
+			</div>
+			<div class="flow step" style="animation-delay:0.8s;">
+				<span class="pill fn">isInRange(1)(10)</span>
+				<span class="pill val">5</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill ok">true</span>
+			</div>
+			<div class="flow step" style="animation-delay:1.1s;">
+				<span class="pill fn">isInRange(1)(10)</span>
+				<span class="pill val">0</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill err">false</span>
+			</div>
+			<div class="flow step" style="animation-delay:1.4s;">
+				<span class="pill fn">isInRange(1)(10)</span>
+				<span class="pill val">NaN</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill err">false</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- record -->
+<div class="card" id="record">
+	<h3>record</h3>
+	<div class="sig">record :: StrMap (a &rarr; Boolean) &rarr; Any &rarr; Boolean</div>
+	<div class="desc">Shape guard. Defines expected keys + their predicates. Returns <code>true</code> when every predicate passes. Total — <code>null</code>/<code>undefined</code> inputs return <code>false</code>, never throw.</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<div style="display:flex; flex-direction:column; gap:12px; align-items:center;">
+			<div class="step" style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center;">
+				<span class="pill fn">{ name: isString, age: isInt }</span>
+			</div>
+			<div class="step" style="font-size:12px;color:var(--muted);">applied to:</div>
+			<div class="flow step">
+				<span class="pill obj">{name: "Ana", age: 30}</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill ok">name &#10003;</span>
+				<span class="pill ok">age &#10003;</span>
+				<span class="arrow">=</span>
+				<span class="pill ok">true</span>
+			</div>
+			<div class="flow step">
+				<span class="pill obj">{name: "Ana"}</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill ok">name &#10003;</span>
+				<span class="pill err">age &#10007;</span>
+				<span class="arrow">=</span>
+				<span class="pill err">false</span>
+			</div>
+			<div class="flow step">
+				<span class="pill err">null</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill err">false</span>
+				<span style="font-size:11px;color:var(--muted)">(total, no throw)</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- ================================================================== -->
+<!-- PARSE                                                               -->
+<!-- ================================================================== -->
+<h2 class="cat-header" id="parse-section">Parse</h2>
+
+<!-- parseFloatM -->
+<div class="card" id="parseFloatM">
+	<h3>parseFloatM</h3>
+	<div class="sig">parseFloatM :: String &rarr; Maybe FiniteNumber</div>
+	<div class="desc">Total float parser. Empty strings, <code>"NaN"</code>, non-finite results all become <code>Nothing</code>.</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<div style="display:flex; flex-direction:column; gap:10px; align-items:center;">
+			<div class="flow step">
+				<span class="pill val">"3.14"</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill fn">parseFloatM</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill just">Just(3.14)</span>
+			</div>
+			<div class="flow step">
+				<span class="pill val">""</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill fn">parseFloatM</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill nothing">Nothing</span>
+			</div>
+			<div class="flow step">
+				<span class="pill val">"abc"</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill fn">parseFloatM</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill nothing">Nothing</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- parseIntM -->
+<div class="card" id="parseIntM">
+	<h3>parseIntM</h3>
+	<div class="sig">parseIntM :: (String, Number, Number) &rarr; Maybe Integer</div>
+	<div class="desc">Range-bounded integer parser. Validates non-empty, parses base-10, checks integer + range. Uses prefix semantics (<code>"3.5"</code> &rarr; <code>3</code>).</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<div style="display:flex; flex-direction:column; gap:10px; align-items:center;">
+			<div class="flow step">
+				<span class="pill val">"42"</span>
+				<span class="pill val">[0, 100]</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill just">Just(42)</span>
+			</div>
+			<div class="flow step">
+				<span class="pill val">"200"</span>
+				<span class="pill val">[0, 100]</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill nothing">Nothing</span>
+				<span style="font-size:11px;color:var(--muted)">out of range</span>
+			</div>
+			<div class="flow step">
+				<span class="pill val">"3.5"</span>
+				<span class="pill val">[0, 100]</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill just">Just(3)</span>
+				<span style="font-size:11px;color:var(--muted)">parseInt prefix</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- ================================================================== -->
+<!-- COLLECTIONS                                                         -->
+<!-- ================================================================== -->
+<h2 class="cat-header" id="collections-section">Collections</h2>
+
+<!-- allPass / anyPass -->
+<div class="card" id="allPass">
+	<h3>allPass / anyPass</h3>
+	<div class="sig">allPass :: [a &rarr; Boolean] &rarr; a &rarr; Boolean &nbsp;&nbsp;|&nbsp;&nbsp; anyPass :: [a &rarr; Boolean] &rarr; a &rarr; Boolean</div>
+	<div class="desc"><code>allPass</code>: AND of predicates — all must pass. <code>anyPass</code>: OR — at least one must pass. Truthy results are normalized to <code>Boolean</code>.</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<div style="display:flex; flex-direction:column; gap:14px; align-items:center;">
+			<div style="font-size:13px; color:var(--cyan); font-weight:600;" class="step">allPass</div>
+			<div class="flow step">
+				<span class="pill fn">[isPos, isEven]</span>
+				<span class="pill val">4</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill ok">&#10003; &amp;&amp; &#10003;</span>
+				<span class="arrow">=</span>
+				<span class="pill ok">true</span>
+			</div>
+			<div class="flow step">
+				<span class="pill fn">[isPos, isEven]</span>
+				<span class="pill val">3</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill ok">&#10003;</span>
+				<span class="pill err">&#10007;</span>
+				<span class="arrow">=</span>
+				<span class="pill err">false</span>
+			</div>
+			<div style="font-size:13px; color:var(--cyan); font-weight:600;" class="step">anyPass</div>
+			<div class="flow step">
+				<span class="pill fn">[isPos, isEven]</span>
+				<span class="pill val">3</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill ok">&#10003;</span>
+				<span class="pill err">&#10007;</span>
+				<span class="arrow">=</span>
+				<span class="pill ok">true</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- getEq -->
+<div class="card" id="getEq">
+	<h3>getEq</h3>
+	<div class="sig">getEq :: (a &rarr; Boolean) &rarr; String &rarr; Any &rarr; Any &rarr; Boolean</div>
+	<div class="desc">Property equality: extract a field (type-checked by predicate), compare with <code>S.equals</code>. Returns <code>false</code> on missing/wrong-typed keys.</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<div style="display:flex; flex-direction:column; gap:10px; align-items:center;">
+			<div class="flow step">
+				<span class="pill fn">isString</span>
+				<span class="pill val">"type"</span>
+				<span class="pill val">"strength"</span>
+				<span class="pill obj">{type: "strength"}</span>
+			</div>
+			<div class="flow step">
+				<span class="arrow">&rarr;</span>
+				<span class="pill ok">true</span>
+			</div>
+		</div>
+	</div>
+	<div class="example">
+		<span class="hl-fn">getEq</span>(<span class="hl-fn">isString</span>)(<span class="hl-val">"type"</span>)(<span class="hl-val">"strength"</span>)({type: <span class="hl-val">"strength"</span>})&nbsp; <span class="hl-comment">// =&gt;</span> <span class="hl-out">true</span><br>
+		<span class="hl-fn">getEq</span>(<span class="hl-fn">isString</span>)(<span class="hl-val">"type"</span>)(<span class="hl-val">"cardio"</span>)({type: <span class="hl-val">"strength"</span>})&nbsp;&nbsp;&nbsp; <span class="hl-comment">// =&gt;</span> false
+	</div>
+</div>
+
+<!-- findEq -->
+<div class="card" id="findEq">
+	<h3>findEq</h3>
+	<div class="sig">findEq :: (a &rarr; Boolean) &rarr; String &rarr; Any &rarr; [Object] &rarr; Maybe Object</div>
+	<div class="desc">Find-by-property: returns <code>Just(firstMatch)</code> or <code>Nothing</code>. Combines <code>getEq</code> with <code>S.find</code>.</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<div style="display:flex; flex-direction:column; gap:10px; align-items:center;">
+			<div class="step" style="display:flex; gap:6px;">
+				<span class="pill obj">{id: 1}</span>
+				<span class="pill obj" style="animation:glow 2s ease-in-out infinite;">{id: 2}</span>
+				<span class="pill obj">{id: 3}</span>
+			</div>
+			<div class="flow step">
+				<span class="pill fn">findEq(isInt)("id")(2)</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill just">Just({id: 2})</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- pluck -->
+<div class="card" id="pluck">
+	<h3>pluck</h3>
+	<div class="sig">pluck :: (a &rarr; Boolean) &rarr; String &rarr; [Object] &rarr; [Maybe a]</div>
+	<div class="desc">Extracts a named property from each object in an array. Each result is a <code>Maybe</code> — missing/wrong-typed keys become <code>Nothing</code>.</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<div style="display:flex; flex-direction:column; gap:10px; align-items:center;">
+			<div class="step" style="display:flex; gap:6px;">
+				<span class="pill obj">{name:"A"}</span>
+				<span class="pill obj">{name:"B"}</span>
+				<span class="pill obj">{x: 1}</span>
+			</div>
+			<div class="flow step">
+				<span class="pill fn">pluck(isString)("name")</span>
+			</div>
+			<div class="step" style="display:flex; gap:6px;">
+				<span class="pill just">Just("A")</span>
+				<span class="pill just">Just("B")</span>
+				<span class="pill nothing">Nothing</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- zipObj -->
+<div class="card" id="zipObj">
+	<h3>zipObj</h3>
+	<div class="sig">zipObj :: [String] &rarr; [a] &rarr; StrMap a</div>
+	<div class="desc">Zips a list of keys and a list of values into an object. Truncated to the shorter list.</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<div style="display:flex; flex-direction:column; gap:10px; align-items:center;">
+			<div class="step" style="display:flex; gap:6px;">
+				<span class="pill val">"a"</span>
+				<span class="pill val">"b"</span>
+				<span class="pill val">"c"</span>
+			</div>
+			<div class="step" style="font-size:18px; color:var(--muted);">+</div>
+			<div class="step" style="display:flex; gap:6px;">
+				<span class="pill val">1</span>
+				<span class="pill val">2</span>
+				<span class="pill val">3</span>
+			</div>
+			<div class="step" style="font-size:18px; color:var(--muted);">&darr;</div>
+			<div class="step">
+				<span class="pill out">{a: 1, b: 2, c: 3}</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- map2 -->
+<div class="card" id="map2">
+	<h3>map2</h3>
+	<div class="sig">map2 :: Functor f &rArr; (a &rarr; b) &rarr; f (f a) &rarr; f (f b)</div>
+	<div class="desc">Maps over a nested functor — two levels deep. <code>map(map(f))</code>.</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<div style="display:flex; flex-direction:column; gap:10px; align-items:center;">
+			<div class="step">
+				<span class="pill val">[[1, 2], [3, 4]]</span>
+			</div>
+			<div class="step">
+				<span class="pill fn">map2(x =&gt; x * 10)</span>
+			</div>
+			<div class="step">
+				<span class="pill out">[[10, 20], [30, 40]]</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- parallelAp -->
+<div class="card" id="parallelAp">
+	<h3>parallelAp</h3>
+	<div class="sig">parallelAp :: (a &rarr; b) &rarr; (a &rarr; c) &rarr; a &rarr; [b, c]</div>
+	<div class="desc">Applies two functions to the same value, returns both results in an array. Like <code>substitution</code> but collects into a pair instead of composing.</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<div class="branch-diagram">
+			<div class="step branch-row">
+				<span class="pill val">x = 5</span>
+			</div>
+			<div class="step branch-line"></div>
+			<div class="step branch-fork">
+				<div>
+					<span class="pill fn">double(5) = 10</span>
+				</div>
+				<div>
+					<span class="pill fn">square(5) = 25</span>
+				</div>
+			</div>
+			<div class="step branch-line"></div>
+			<div class="step branch-row">
+				<span class="pill out">[10, 25]</span>
+			</div>
+		</div>
+	</div>
+	<div class="example">
+		<span class="hl-fn">parallelAp</span>(<span class="hl-fn">double</span>)(<span class="hl-fn">square</span>)(<span class="hl-val">5</span>)&nbsp; <span class="hl-comment">// =&gt;</span> <span class="hl-out">[10, 25]</span>
+	</div>
+</div>
+
+<!-- ================================================================== -->
+<!-- EFFECTS                                                             -->
+<!-- ================================================================== -->
+<h2 class="cat-header" id="effects-section">Effects</h2>
+
+<!-- tap -->
+<div class="card" id="tap">
+	<h3>tap</h3>
+	<div class="sig">tap :: (a &rarr; Any) &rarr; a &rarr; a</div>
+	<div class="desc">Runs a side-effect function, then returns the original value unchanged. The classic "peek" combinator for debugging or logging inside a pipe.</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<span class="step pill val">42</span>
+		<span class="step arrow">&rarr;</span>
+		<span class="step pill fn">tap(console.log)</span>
+		<span class="step arrow" style="display:flex;flex-direction:column;align-items:center;gap:2px;"><span>&rarr;</span><span style="font-size:10px;color:var(--muted);">logs 42</span></span>
+		<span class="step pill out">42</span>
+		<span class="step" style="font-size:11px;color:var(--muted)">(unchanged)</span>
+	</div>
+	<div class="example">
+		<span class="hl-fn">pipe</span>([parse, <span class="hl-fn">tap</span>(console.log), validate, render])&nbsp; <span class="hl-comment">// inspect mid-pipe</span>
+	</div>
+</div>
+
+<!-- encaseStorage -->
+<div class="card" id="encaseStorage">
+	<h3>encaseStorage</h3>
+	<div class="sig">encaseStorage :: (() &rarr; a) &rarr; Either Error a</div>
+	<div class="desc">Wraps a throwing thunk into an <code>Either</code>. Success &rarr; <code>Right(value)</code>, exception &rarr; <code>Left(error)</code>. Used for localStorage operations that may fail in private browsing.</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<div style="display:flex; flex-direction:column; gap:10px; align-items:center;">
+			<div class="flow step">
+				<span class="pill fn">() =&gt; 42</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill ok">Right(42)</span>
+			</div>
+			<div class="flow step">
+				<span class="pill fn">() =&gt; throw "boom"</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill err">Left("boom")</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- readStorage / writeStorage -->
+<div class="card" id="readStorage">
+	<h3>readStorage / writeStorage</h3>
+	<div class="sig">readStorage :: String &rarr; () &rarr; String|null &nbsp;&nbsp;|&nbsp;&nbsp; writeStorage :: String &rarr; String &rarr; Either Error ()</div>
+	<div class="desc"><code>readStorage</code> returns a thunk that reads localStorage. <code>writeStorage</code> wraps <code>setItem</code> in <code>S.encase</code> — private browsing throws, this catches it as <code>Left</code>.</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<div style="display:flex; flex-direction:column; gap:10px; align-items:center;">
+			<div class="flow step">
+				<span class="pill fn">readStorage("key")</span>
+				<span class="pill val">()</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill out">"stored_value"</span>
+			</div>
+			<div class="flow step">
+				<span class="pill fn">writeStorage("key")</span>
+				<span class="pill val">"data"</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill ok">Right(undefined)</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- entriesOf -->
+<div class="card" id="entriesOf">
+	<h3>entriesOf</h3>
+	<div class="sig">entriesOf :: StrMap Any &rarr; [[String, Any]]</div>
+	<div class="desc">The only iterator for heterogeneous StrMaps. Sanctuary folds throw on mixed-type values; this wraps <code>Object.entries</code> safely via <code>def</code>.</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<span class="step pill obj">{a: 1, b: "x"}</span>
+		<span class="step arrow">&rarr;</span>
+		<span class="step pill fn">entriesOf</span>
+		<span class="step arrow">&rarr;</span>
+		<span class="step pill out">[["a", 1], ["b", "x"]]</span>
+	</div>
+</div>
+
+<!-- rafThrottle -->
+<div class="card" id="rafThrottle">
+	<h3>rafThrottle</h3>
+	<div class="sig">rafThrottle :: ((...args) &rarr; void) &rarr; ((...args) &rarr; void)</div>
+	<div class="desc">Throttles a function to one call per animation frame. Internal <code>requestAnimationFrame</code> bookkeeping — the only mutable <code>let</code> lives inside the closure.</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<div style="display:flex; flex-direction:column; gap:8px; align-items:center;">
+			<div class="flow step">
+				<span class="pill val">call 1</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill ok">scheduled</span>
+			</div>
+			<div class="flow step">
+				<span class="pill val">call 2</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill nothing">dropped</span>
+			</div>
+			<div class="flow step">
+				<span class="pill val">call 3</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill nothing">dropped</span>
+			</div>
+			<div class="flow step">
+				<span style="font-size:11px;color:var(--muted);">&#x1f3ac; next frame</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill ok">call 1 executes</span>
+			</div>
+			<div class="flow step">
+				<span class="pill val">call 4</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill ok">scheduled</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- replaceFirst / replaceNamed -->
+<div class="card" id="replaceFirst">
+	<h3>replaceFirst / replaceNamed</h3>
+	<div class="sig">replaceFirst :: RegExp &rarr; String &rarr; String &rarr; String<br>replaceNamed :: String &rarr; String &rarr; String &rarr; String</div>
+	<div class="desc">Curried string replacement. <code>replaceFirst</code> takes a regex, <code>replaceNamed</code> takes a literal string. Both replace the first occurrence.</div>
+	<div class="diagram anim-flow" data-replay>
+		<button class="replay-btn" onclick="replay(this)">replay</button>
+		<div style="display:flex; flex-direction:column; gap:10px; align-items:center;">
+			<div class="flow step">
+				<span class="pill fn">replaceFirst(/world/)</span>
+				<span class="pill val">"Earth"</span>
+				<span class="pill val">"hello world"</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill out">"hello Earth"</span>
+			</div>
+			<div class="flow step">
+				<span class="pill fn">replaceNamed("{name}")</span>
+				<span class="pill val">"Ana"</span>
+				<span class="pill val">"Hi {name}!"</span>
+				<span class="arrow">&rarr;</span>
+				<span class="pill out">"Hi Ana!"</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+</main>
+
+<script>
+function replay(btn) {
+	const diagram = btn.closest('.diagram');
+	const steps = diagram.querySelectorAll('.step');
+	steps.forEach(s => {
+		s.style.animation = 'none';
+		s.offsetHeight; // reflow
+		s.style.animation = '';
+	});
+}
+
+// Intersection Observer — only animate when visible
+const observer = new IntersectionObserver((entries) => {
+	entries.forEach(entry => {
+		if (entry.isIntersecting) {
+			entry.target.classList.add('anim-flow');
+			observer.unobserve(entry.target);
+		}
+	});
+}, { threshold: 0.3 });
+
+document.addEventListener('DOMContentLoaded', () => {
+	document.querySelectorAll('.diagram').forEach(d => {
+		d.classList.remove('anim-flow');
+		observer.observe(d);
+	});
+});
+</script>
+
+</body>
+</html>
