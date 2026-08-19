@@ -28,7 +28,6 @@ const UndefinedRep = $.Undefined;
  *
  */
 const T = S.T;
-const thrush = T;
 
 /**
  *
@@ -496,7 +495,7 @@ const concat = S.concat;
 module.exports = {
 	$, S, def,
 	NumberRep, StringRep, BooleanRep, ObjectRep, ArrayRep, DateRep, NullRep, UndefinedRep,
-	T, thrush, substitution, apply, delayApply, mergeSingleton, constTrue, constFalse,
+	T, substitution, apply, delayApply, mergeSingleton, constTrue, constFalse,
 	toMaybe, ValidDate, isValidDate,
 	isString, isBoolean, isObject, isArrayOf, isInt, isFiniteNumber, isNonNullable, isNonEmptyStr,
 	isDateStr, isIn, isInRange, record, replaceFirst, replaceNamed,
