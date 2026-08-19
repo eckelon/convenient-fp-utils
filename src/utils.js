@@ -414,14 +414,6 @@ const parallelAp = def('parallelAp')({})([$.AnyFunction, $.AnyFunction, $.Any, $
  */
 const tap = (f) => (a) => (f(a), a);
 
-/**
- * consoleWarning :: String -> a -> a
- *
- * Logs a warning and returns the value unchanged.
- *
- * @returns {Any}
- */
-const consoleWarning = (msg) => tap(() => console.warn(msg));
 
 /**
  * This is the 'no operation' function. It just returns undefined.
@@ -494,7 +486,7 @@ module.exports = {
 	parseFloatM, parseIntM, encaseStorage, readStorage, writeStorage,
 	entriesOf, rafThrottle,
 	allPass, anyPass, getEq, findEq, pluck, zipObj, map2, parallelAp,
-	tap, consoleWarning, noop,
+	tap, noop,
 	pipe, fromMaybe, isNothing, maybeToEither, either, maybe,
 	map, find, justs, isJust, gets, chain, maybeToNullable,
 	parseJson, fromEither, encase, reduce, compose, filter,
